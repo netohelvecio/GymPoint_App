@@ -1,24 +1,29 @@
-INSTRUÇÕES NECESSÁRIAS PARA EXECUTAR APP
+# Desafio final GoStack 9.0 - Rocketseat
+Aplicação GymPoint completa: Backend - Frontend - Mobile
 
-BACKEND
-- BAIXAR AS IMAGENS DO DOCKER: redis:alpine E postgres:11
-- BAIXAR DEPENDÊNCIAS USANDO COMANDO yarn NO TERMINAL
-- PREENCHER VARIÁVES AMBIENTE COM ARQUIVO .env.example
-- EXECUTAR MIGRATIONS COM COMANDO  yarn sequelize-cli db:migrate
-- EXECUTAR SEED COM COMANDO yarn sequelize-cli db:seed:all
-- EXECUTAR yarn dev PARA INICIAR API
-- EXECUTAR yarn queue PARA INICIAR FILAS DE EMAIL
+[TOC]
 
-FRONTEND
-- BAIXAR DEPENDÊNCIAS USANDO COMANDO yarn NO TERMINAL
-- EXECUTAR yarn start PARA INICIAR APP
+##Instruções necessárias para executar app
 
-MOBILE
-- APP FEITO EM ANDROID
-- BAIXAR DEPENDÊNCIAS USANDO COMANDO yarn NO TERMINAL
-- NAS CONFIG DO REACTOTRON E DA API MUDAR O IP, POIS APP FOI EMULADO NO MEU CELULAR
-- EXECUTAR react-native run-android PARA INSTALAR APP
+### Backend
+- Baixar as imagens do docker: **redis:alpine** e **postgres:11**
+- Baixar dependências usando comando **yarn** no terminal
+- Preencher variáves ambiente com arquivo **.env.example**
+- Executar migrations com comando  **yarn sequelize-cli db:migrate**
+- Executar seed com comando **yarn sequelize-cli db:seed:all**
+- Executar **yarn dev** para iniciar api
+- Executar **yarn queue** para iniciar filas de email
 
-ADICIONAL
-- ARQUIVO DO INSOMNIA ESTÁ NA RAIZ DO ARQUIVO
+### Frontend
+- Baixar dependências usando comando **yarn** no terminal
+- Executar **yarn start** para iniciar app
+
+### Mobile
+- App desenvolvido na plataforma **Android**
+- Baixar dependências usando comando **yarn** no terminal
+- Nas configurações do **[Reactotron](https://github.com/netohelvecio/GymPoint_App/blob/master/mobile/src/config/ReactotronConfig.js)** e da **[Api](https://github.com/netohelvecio/GymPoint_App/blob/master/mobile/src/services/api.js)** necessário mudar o IP, pois app foi emulado no meu celular
+- Executar **react-native run-android** para instalar app
+
+### Adicional
+- Arquivo do insomnia está na raiz do arquivo
 
