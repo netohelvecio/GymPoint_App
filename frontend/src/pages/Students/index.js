@@ -22,26 +22,27 @@ export default function Students() {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
 
+  async function loadStudent() {
+    try {
+      setLoading(true);
+      const response = await api.get('students', {
+        params: {
+          page,
+          name,
+        },
+      });
+
+      setStudent(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error('Erro ao listar estudantes');
+    }
+  }
+
   // CARREGA TODOS OS ESTUDANTES COM PAGINAÇÃO
   useEffect(() => {
-    async function loadStudent() {
-      try {
-        setLoading(true);
-        const response = await api.get('students', {
-          params: {
-            page,
-            name,
-          },
-        });
-
-        setStudent(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error('Erro ao listar estudantes');
-      }
-    }
-
     loadStudent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, page]);
 
   // FILTRA NOME
@@ -59,6 +60,7 @@ export default function Students() {
       try {
         await api.delete(`students/${id}`);
 
+        loadStudent();
         toast.success('Aluno deletado!');
       } catch (error) {
         toast.error('Error ao deletar estudante');

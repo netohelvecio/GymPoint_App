@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
 import api from '~/services/api';
+import history from '~/services/history';
 
 import { Container, ContainerHeader, RegisterOptions } from './styles';
 
@@ -39,6 +40,7 @@ export default function StudentsRegister() {
         height,
       });
 
+      history.push('/student');
       toast.success('Estudante cadastrado!');
     } catch (error) {
       toast.error('ERROR AO CADASTRAR ESTUDANTE, VERIFIQUE OS DADOS!');

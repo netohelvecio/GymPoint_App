@@ -21,32 +21,33 @@ export default function Plans() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // LISTA PLANOS EXISTENTES
-    async function loadPlan() {
-      try {
-        setLoading(true);
-        const response = await api.get('plans', {
-          params: {
-            page,
-          },
-        });
+  // LISTA PLANOS EXISTENTES
+  async function loadPlan() {
+    try {
+      setLoading(true);
+      const response = await api.get('plans', {
+        params: {
+          page,
+        },
+      });
 
-        // FORMATA DATA
-        const data = response.data.map(p => ({
-          ...p,
-          durationFormatted: `${p.duration} mês`,
-          priceFormatted: formatPrice(p.price),
-        }));
+      // FORMATA DATA
+      const data = response.data.map(p => ({
+        ...p,
+        durationFormatted: `${p.duration} mês`,
+        priceFormatted: formatPrice(p.price),
+      }));
 
-        setPlan(data);
-        setLoading(false);
-      } catch (error) {
-        toast.error('Erro ao listar planos');
-      }
+      setPlan(data);
+      setLoading(false);
+    } catch (error) {
+      toast.error('Erro ao listar planos');
     }
+  }
 
+  useEffect(() => {
     loadPlan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   // DELETA PLANO
@@ -57,6 +58,7 @@ export default function Plans() {
       try {
         await api.delete(`plans/${id}`);
 
+        loadPlan();
         toast.success('Plano deletado!');
       } catch (error) {
         toast.error('Erro ao deletar plano');

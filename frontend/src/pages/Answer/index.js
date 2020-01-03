@@ -52,26 +52,27 @@ export default function Answer() {
     setModal(false);
   }
 
+  async function handleAnswer() {
+    try {
+      setLoading(true);
+
+      const response = await api.get('help-orders/answer', {
+        params: {
+          page,
+        },
+      });
+
+      setLoading(false);
+      setAnswers(response.data);
+    } catch (error) {
+      toast.error('Erro ao listar perguntas');
+    }
+  }
+
   // LISTA PERGUNTAS EXISTENTES
   useEffect(() => {
-    async function handleAnswer() {
-      try {
-        setLoading(true);
-
-        const response = await api.get('help-orders/answer', {
-          params: {
-            page,
-          },
-        });
-
-        setLoading(false);
-        setAnswers(response.data);
-      } catch (error) {
-        toast.error('Erro ao listar perguntas');
-      }
-    }
-
     handleAnswer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   // RESPONDE PERGUNTA
@@ -80,6 +81,7 @@ export default function Answer() {
       await api.post(`help-orders/${answer.id}/answer`, { answer: answerText });
 
       closeModal();
+      handleAnswer();
       toast.success('Pergunta respondida');
     } catch (error) {
       toast.error('Erro ao responder a pergunta');

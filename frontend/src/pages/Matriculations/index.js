@@ -22,42 +22,37 @@ import ContainerLoading from '~/components/Loading';
 export default function Matriculations() {
   const [matriculation, setMatriculation] = useState([]);
   const [page, setPage] = useState(1);
-  const [porPage, setPorPage] = useState(6);
   const [loading, setLoading] = useState(false);
 
-  // PAGINAÇÃO DA LISTA
-  const indexOfLast = page * porPage;
-  const indexOfFirst = indexOfLast - porPage;
-  const currentTodos = matriculation.slice(indexOfFirst, indexOfLast);
+  // LISTA TODAS MATRICULAS
+  async function loadMatriculation() {
+    setLoading(true);
+    const response = await api.get('matriculations', {
+      params: {
+        page,
+      },
+    });
+
+    // FORMATA DATAS
+    const data = response.data.map(d => ({
+      ...d,
+      startDateFormatted: format(
+        parseISO(d.start_date),
+        "dd 'de' LLLL 'de' yyyy",
+        { locale: pt }
+      ),
+      endDateFormatted: format(parseISO(d.end_date), "dd 'de' LLLL 'de' yyyy", {
+        locale: pt,
+      }),
+    }));
+
+    setMatriculation(data);
+    setLoading(false);
+  }
 
   useEffect(() => {
-    // LISTA TODAS MATRICULAS
-    async function loadMatriculation() {
-      setLoading(true);
-      const response = await api.get('matriculations', {
-        page,
-      });
-
-      // FORMATA DATAS
-      const data = response.data.map(d => ({
-        ...d,
-        startDateFormatted: format(
-          parseISO(d.start_date),
-          "dd 'de' LLLL 'de' yyyy",
-          { locale: pt }
-        ),
-        endDateFormatted: format(
-          parseISO(d.end_date),
-          "dd 'de' LLLL 'de' yyyy",
-          { locale: pt }
-        ),
-      }));
-
-      setMatriculation(data);
-      setLoading(false);
-    }
-
     loadMatriculation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   // DELETA MATRICULA
@@ -65,6 +60,7 @@ export default function Matriculations() {
     const result = window.confirm('Deseja deletar aluno?');
     if (result) {
       await api.delete(`matriculations/${id}`);
+      loadMatriculation();
       toast.success('Matrícula deletada!');
     }
   }
@@ -96,7 +92,7 @@ export default function Matriculations() {
           </thead>
 
           <tbody>
-            {currentTodos.map(m => (
+            {matriculation.map(m => (
               <tr key={m.id.toString()}>
                 <td> {m.student.name} </td>
                 <td> {m.plan.title} </td>

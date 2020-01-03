@@ -8,7 +8,8 @@ import { addMonths, format, addDays } from 'date-fns';
 
 import { formatPrice } from '~/util/format';
 import api from '~/services/api';
-import ReactSelect from '~/components/ReactSelect';
+import history from '~/services/history';
+import AsyncSelect from '~/components/AsyncSelect';
 
 import {
   Container,
@@ -28,7 +29,7 @@ const schema = Yup.object().shape({
 
 export default function MatriculationsRegister() {
   const [plan, setPlan] = useState([]);
-  const [student, setStudent] = useState([]);
+  const [name, setName] = useState('');
   const [planSelect, setPlanSelect] = useState();
   const [endDate, setEndDate] = useState();
   const [startDate, setStartDate] = useState();
@@ -46,25 +47,18 @@ export default function MatriculationsRegister() {
       }
     }
 
-    // LISTA ESTUDANTES
-    async function handleStudent() {
-      try {
-        const response = await api.get('students');
-
-        const data = response.data.map(s => ({
-          id: s.id.toString(),
-          title: s.name,
-        }));
-
-        setStudent(data);
-      } catch (error) {
-        toast.error('Erro ao listar estudantes');
-      }
-    }
-
-    handleStudent();
     handlePlan();
-  }, []);
+  }, [name]);
+
+  const studentPromise = value =>
+    api
+      .get('/students', {
+        params: {
+          name: value,
+        },
+      })
+      .then(({ data }) => data)
+      .catch(() => []);
 
   // PEGA O PLANO SELECIONADA E CALCULA VALOR FINAL
   function getPlanValue(e) {
@@ -101,6 +95,8 @@ export default function MatriculationsRegister() {
         plan_id: planId,
         start_date,
       });
+
+      history.push('/matriculation');
       toast.success('Matrícula realiazada!');
     } catch (error) {
       toast.error('ERROR AO CADASTRAR MATRÍCULA, VERIFIQUE OS DADOS!');
@@ -126,11 +122,13 @@ export default function MatriculationsRegister() {
       </ContainerHeader>
 
       <Form schema={schema} onSubmit={handleSubmit} id="form">
-        <ReactSelect
+        <AsyncSelect
           name="studentId"
-          placeholder="Escolha o aluno"
-          options={student}
           label="ALUNO"
+          loadOptions={studentPromise}
+          placeholder="Selecione o aluno"
+          value={name}
+          onChange={value => setName(value)}
         />
 
         <SecondPartForm>

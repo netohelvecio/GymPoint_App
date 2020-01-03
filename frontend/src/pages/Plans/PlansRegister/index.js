@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import { formatPrice } from '~/util/format';
 import api from '~/services/api';
+import history from '~/services/history';
 
 import { Container, ContainerHeader, RegisterOptions } from './styles';
 
@@ -36,6 +37,7 @@ export default function PlansRegister() {
         price,
       });
 
+      history.push('/plan');
       toast.success('Plano cadastrado!');
     } catch (error) {
       toast.error('ERROR AO CADASTRAR PLANO, VERIFIQUE OS DADOS!');

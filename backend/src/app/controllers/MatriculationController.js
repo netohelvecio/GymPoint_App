@@ -91,13 +91,13 @@ class MatriculationController {
   }
 
   async index(req, res) {
-    //const { page = 1 } = req.query;
+    const { page = 1 } = req.query;
 
     // matriculas existentes
     const matriculation = await Matriculation.findAll({
       order: ['start_date'],
-      //limit: 8,
-      //offset: (page - 1) * 8,
+      limit: 7,
+      offset: (page - 1) * 7,
       attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
       include: [
         { model: Student, as: 'student', attributes: ['name', 'email'] },
