@@ -44,7 +44,6 @@ function Checkins({ isFocused }) {
 
       const data = response.data.map(checkin => ({
         ...checkin,
-        checkinNumber: `Check-in #${checkin.id}`,
         timeFormatted: formatDistanceToNow(parseISO(checkin.created_at), {
           locale: pt,
           addSuffix: true,
@@ -115,9 +114,9 @@ function Checkins({ isFocused }) {
             keyExtractor={item => item.id.toString()}
             onEndReachedThreshold={0.2}
             onEndReached={loadMore}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <Checkin>
-                <CheckinNumber>{item.checkinNumber}</CheckinNumber>
+                <CheckinNumber>Check-in #{index + 1}</CheckinNumber>
                 <CheckinTime>{item.timeFormatted}</CheckinTime>
               </Checkin>
             )}
